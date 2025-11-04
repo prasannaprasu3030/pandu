@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Happy Birthday, Pandu 💛</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #444 0, #050505 40%, #000 100%);
+      color: #f8f1ff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto; /* allow scrolling */
+    }
+
+    /* Background: balloons + hearts */
+    .background-layer {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .balloon-container,
+    .heart-container {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* Confetti layer on top */
+    .confetti-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    /* Balloons */
+    .balloon {
+      position: absolute;
+      width: 60px;
+      height: 80px;
+      background: radial-gradient(circle at 30% 20%, #ffffff, #fdf7e8 40%, #f3e0b7 80%);
+      border-radius: 50% 50% 45% 45%;
+      box-shadow: 0 0 18px rgba(255,255,255,0.9),
+                  0 14px 26px rgba(0,0,0,0.7);
+      opacity: 0.95;
+      animation: floatUp linear infinite;
+      border: 1px solid rgba(255,255,255,0.9);
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      width: 2px;
+      height: 24px;
+      background: rgba(255,255,255,0.8);
+      transform: translateX(-50%);
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(110vh); opacity: 0; }
+      10%  { opacity: 0.95; }
+      100% { transform: translateY(-120vh); opacity: 0; }
+    }
+
+    /* Hearts */
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #ff4b81;
+      transform: rotate(-45deg);
+      opacity: 0.9;
+      animation: floatHeart 7s linear infinite;
+      box-shadow: 0 0 8px rgba(255,75,129,0.7);
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #ff4b81;
+      border-radius: 50%;
+    }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after  { top: 0; left: 10px; }
+
+    @keyframes floatHeart {
+      0%   { transform: translateY(100vh) rotate(-45deg); opacity: 0; }
+      15%  { opacity: 0.95; }
+      100% { transform: translateY(-20vh) rotate(-45deg); opacity: 0; }
+    }
+
+    /* Confetti */
+    .confetti-piece {
+      position: absolute;
+      width: 6px;
+      height: 12px;
+      opacity: 0.9;
+      border-radius: 2px;
+      animation: fallConfetti 4s linear forwards;
+    }
+
+    @keyframes fallConfetti {
+      0%   { transform: translateY(-10vh) rotateZ(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotateZ(360deg); opacity: 0; }
+    }
+
+    /* Main content */
+    .content {
+      position: relative;
+      z-index: 5;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px 80px;
+    }
+
+    .card {
+      max-width: 900px;
+      width: 100%;
+      background: rgba(10,10,10,0.85);
+      border-radius: 24px;
+      border: 1px solid rgba(255,215,0,0.6);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      padding: 40px 24px 32px;
+      backdrop-filter: blur(10px);
+      margin: 0 auto;
+    }
+
+    .card.sparkle {
+      box-shadow:
+        0 0 30px rgba(255,215,0,0.9),
+        0 0 80px rgba(255,255,255,0.5),
+        0 25px 60px rgba(0,0,0,0.9);
+      border-color: #ffe999;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 2.3rem;
+      color: #ffd85a;
+      margin-bottom: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 1.05rem;
+      color: #f0e5ff;
+      opacity: 0.9;
+      margin-bottom: 24px;
+    }
+
+    .highlight-name {
+      color: #ffd700;
+      font-weight: 600;
+    }
+
+    .divider {
+      width: 90px;
+      height: 2px;
+      margin: 0 auto 24px;
+      background: linear-gradient(
+        to right,
+        transparent,
+        #ffd700,
+        #ffedb3,
+        #ffd700,
+        transparent
+      );
+    }
+
+    .message {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #f6f4ff;
+      text-align: justify;
+      margin-bottom: 24px;
+    }
+
+    .message p + p {
+      margin-top: 10px;
+    }
+
+    .from {
+      margin-top: 18px;
+      text-align: right;
+      color: #ffdf7a;
+      font-style: italic;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 24px 0 28px;
+    }
+
+    .photo {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,215,0,0.5);
+      background: #111;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      aspect-ratio: 4/5;
+    }
+
+    .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gift-section {
+      text-align: center;
+      margin-top: 10px;
+      border-top: 1px dashed rgba(255,215,0,0.4);
+      padding-top: 16px;
+    }
+
+    .surprise-message {
+      color: #ffeac0;
+      font-size: 0.95rem;
+      margin-top: 4px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .surprise-message span {
+      color: #ffd700;
+      font-weight: 600;
+    }
+
+    audio {
+      display: none;
+    }
+
+    .footer {
+      margin-top: 24px;
+      font-size: 0.8rem;
+      text-align: center;
+      color: #ffebb3;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background layer: balloons + hearts -->
+  <div class="background-layer">
+    <div class="balloon-container" id="balloon-container"></div>
+    <div class="heart-container" id="heart-container"></div>
+  </div>
+
+  <!-- Confetti layer -->
+  <div class="confetti-container" id="confetti-container"></div>
+
+  <!-- Main content -->
+  <div class="content">
+    <div class="card sparkle" id="main-card">
+      <h1 class="title">Happy Birthday, Pandu 💛</h1>
+      <p class="subtitle">
+        To my favorite human – <span class="highlight-name">YOU</span> make every day brighter than gold.
+      </p>
+      <div class="divider"></div>
+
+      <div class="message">
+        <p>My dearest Pandu,</p>
+
+        <p>
+          You’re that someone who makes ordinary days feel special, who brings calm when things get hard, and whose heart feels like home no matter where we are. You’ve filled my life with colors I didn’t even know existed with laughter that heals, with patience that teaches, and with love that makes everything feel lighter
+        </p>
+
+        <p>
+          Today is your day, but somehow it feels like I’m the one getting the gift... because I get to celebrate you. The one who makes my world softer, brighter, and warmer just by being in it. Thank you for your kindness, for your strength, for always showing up with love no matter how tough things get. You make me feel safe, seen, and deeply loved in ways I never thought possible.
+        </p>
+
+        <p>
+          To my sleeping beauty.... I’m so proud of you for everything you are and everything you’re becoming. Your heart, your calmness, your silly jokes, and your beautiful way of loving are what make you so special. I hope this year brings you moments of peace, loud laughter, and all the happiness your heart can hold. I’ll be right here... cheering for you, teasing you, loving you, and choosing you, over and over again.
+        </p>
+
+        <p class="from">
+          Happy Birthday, my love. You are my calm, my comfort, and my favorite part of this life.,<br />
+          your Ammu 💛
+        </p>
+      </div>
+
+      <div class="gallery">
+        <div class="photo">
+          <img src="pandu1.jpg" alt="Pandu and Prasu 1" />
+        </div>
+        <div class="photo">
+          <img src="pandu2.jpg" alt="Pandu and Prasu 2" />
+        </div>
+        <div class="photo">
+          <img src="pandu3.jpg" alt="Pandu and Prasu 3" />
+        </div>
+      </div>
+
+      <div class="gift-section">
+        <div class="surprise-message">
+          Hey <span>Pandu</span>, if you ever forget how loved you are, just remember this page exists...
+          made slowly, smiling, thinking only of you. 💛<br />
+          You’re not just my boyfriend...you’re my safe place, my favorite person, and my home.
+        </div>
+      </div>
+
+      <div class="footer">
+        Made with so much love by Potti 💛
+      </div>
+    </div>
+  </div>
+
+  <!-- Background music -->
+  <audio id="bg-music" src="pandu-birthday-song.mp3" loop></audio>
+
+  <script>
+    function createBalloons() {
+      const container = document.getElementById("balloon-container");
+      const columns = { left: [5,25], center: [38,62], right: [75,95] };
+
+      for (let i = 0; i < 22; i++) {
+        const b = document.createElement("div");
+        b.classList.add("balloon");
+        const col = columns[Object.keys(columns)[Math.floor(Math.random() * 3)]];
+        const left = col[0] + Math.random() * (col[1] - col[0]);
+        const size = 45 + Math.random() * 35;
+        const dur = 14 + Math.random() * 10;
+        const delay = -Math.random() * dur;
+
+        b.style.left = left + "%";
+        b.style.width = size * 0.75 + "px";
+        b.style.height = size + "px";
+        b.style.animationDuration = dur + "s";
+        b.style.animationDelay = delay + "s";
+        container.appendChild(b);
+      }
+    }
+
+    function createHearts(count = 20) {
+      const container = document.getElementById("heart-container");
+      for (let i = 0; i < count; i++) {
+        const h = document.createElement("div");
+        h.classList.add("heart");
+        const left = Math.random() * 100;
+        const size = 12 + Math.random() * 20;
+        const dur = 7 + Math.random() * 5;
+        const delay = -Math.random() * dur;
+
+        h.style.left = left + "%";
+        h.style.width = size + "px";
+        h.style.height = size + "px";
+        h.style.animationDuration = dur + "s";
+        h.style.animationDelay = delay + "s";
+        container.appendChild(h);
+      }
+    }
+
+    function launchConfetti() {
+      const c = document.getElementById("confetti-container");
+      const colors = ["#ffd700", "#ff6bcb", "#7cf3ff", "#ffffff", "#ff9f1c", "#b5ff7d"];
+
+      for (let i = 0; i < 80; i++) {
+        const conf = document.createElement("div");
+        conf.classList.add("confetti-piece");
+        conf.style.left = Math.random() * 100 + "%";
+        conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+        conf.style.animationDuration = 3 + Math.random() * 2 + "s";
+        conf.style.animationDelay = Math.random() * 0.5 + "s";
+        c.appendChild(conf);
+        setTimeout(() => conf.remove(), 5000);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      createBalloons();
+      createHearts(24);
+
+      launchConfetti();
+      setInterval(launchConfetti, 2500);
+
+      const audio = document.getElementById("bg-music");
+
+      // Try autoplay
+      function tryPlay() {
+        if (!audio) return;
+        audio.play().catch(err => {
+          console.log("Autoplay blocked, waiting for first tap/click...", err);
+        });
+      }
+
+      tryPlay();
+
+      // Fallback: first click/tap anywhere starts music
+      function unlockAudio() {
+        if (!audio) return;
+        audio.play().catch(() => {});
+        document.removeEventListener("click", unlockAudio);
+        document.removeEventListener("touchstart", unlockAudio);
+      }
+
+      document.addEventListener("click", unlockAudio);
+      document.addEventListener("touchstart", unlockAudio);
+    });
+  </script>
+</body>
+</html>
